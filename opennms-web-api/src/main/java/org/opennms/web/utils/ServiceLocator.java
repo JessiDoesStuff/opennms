@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2016 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2016 The OpenNMS Group, Inc.
+ * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,24 +26,32 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.topology.api;
+package org.opennms.web.utils;
 
-import java.util.List;
+import java.util.Objects;
 
-import org.opennms.features.topology.api.topo.Criteria;
-import org.opennms.features.topology.api.topo.GraphProvider;
-import org.opennms.features.topology.api.topo.MetaTopologyProvider;
+import org.opennms.core.soa.ServiceRegistry;
+import org.opennms.core.spring.BeanUtils;
+import org.springframework.stereotype.Service;
 
-public interface TopologyService {
+@Service
+public class ServiceLocator {
 
-    Graph getGraph(String metaTopologyId, String namespace, Criteria[] criteria, int semanticZoomLevel);
+    private ServiceRegistry serviceRegistry;
 
-    GraphProvider getGraphProvider(String metaTopologyId, String namespace);
+    private ServiceRegistry getServiceRegistry() {
+        if (serviceRegistry == null) {
+            serviceRegistry = BeanUtils.getBean("soaContext", "serviceRegistry", ServiceRegistry.class);
+            Objects.requireNonNull(serviceRegistry);
+        }
+        return serviceRegistry;
+    }
 
-    // Determines preferred/default layout
-    LayoutAlgorithm getPreferredLayoutAlgorithm(String metaTopologyId, String namespace);
-
-    MetaTopologyProvider getMetaTopologyProvider(String metaTopologyId);
-
-    List<MetaTopologyProvider> getMetaTopologyProviders();
+    public <T> T findService(Class<T> serviceClass) throws ServiceTemporarilyUnavailableException {
+        T service = getServiceRegistry().findProvider(serviceClass);
+        if (service == null) {
+            throw new ServiceTemporarilyUnavailableException(serviceClass);
+        }
+        return service;
+    }
 }

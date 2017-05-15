@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2016 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2016 The OpenNMS Group, Inc.
+ * Copyright (C) 2017-2017 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2017 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,24 +26,49 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.topology.api;
+package org.opennms.web.rest.v2.topology.model;
 
 import java.util.List;
 
-import org.opennms.features.topology.api.topo.Criteria;
-import org.opennms.features.topology.api.topo.GraphProvider;
-import org.opennms.features.topology.api.topo.MetaTopologyProvider;
+public class MetaTopologyDTO {
 
-public interface TopologyService {
+    private String defaultNamespace;
 
-    Graph getGraph(String metaTopologyId, String namespace, Criteria[] criteria, int semanticZoomLevel);
+    private List<String> namespaces;
 
-    GraphProvider getGraphProvider(String metaTopologyId, String namespace);
+    private String breadcrumbStrategy;
 
-    // Determines preferred/default layout
-    LayoutAlgorithm getPreferredLayoutAlgorithm(String metaTopologyId, String namespace);
+    private String id;
 
-    MetaTopologyProvider getMetaTopologyProvider(String metaTopologyId);
+    public String getDefaultNamespace() {
+        return defaultNamespace;
+    }
 
-    List<MetaTopologyProvider> getMetaTopologyProviders();
+    public void setDefaultNamespace(String defaultNamespace) {
+        this.defaultNamespace = defaultNamespace;
+    }
+
+    public List<String> getNamespaces() {
+        return namespaces;
+    }
+
+    public void setNamespaces(List<String> namespaces) {
+        this.namespaces = namespaces;
+    }
+
+    public String getBreadcrumbStrategy() {
+        return breadcrumbStrategy;
+    }
+
+    public void setBreadcrumbStrategy(String breadcrumbStrategy) {
+        this.breadcrumbStrategy = breadcrumbStrategy;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

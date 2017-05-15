@@ -208,6 +208,11 @@ public class DefaultTopologyService implements TopologyService {
         return metaTopologyProvider;
     }
 
+    @Override
+    public List<MetaTopologyProvider> getMetaTopologyProviders() {
+        return serviceLocator.findServices(MetaTopologyProvider.class, null);
+    }
+
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = Objects.requireNonNull(serviceLocator);
     }
